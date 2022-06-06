@@ -10,7 +10,7 @@ ADD https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.63/bin/apache-tomcat-9.0.63.ta
 
 RUN tar -xzf apache-tomcat-9.0.63.tar.gz
 
-COPY target/gameoflife.war /usr/local/tomcat/webapps/ROOT.war
+COPY target/gameoflife.war /usr/local/tomcat/webapps/ROOT.war .
 
 EXPOSE 8080 
 
