@@ -1,0 +1,42 @@
+name: gol
+
+on: 
+    workflow_dispatch:
+    push:
+#   pull_request_target:
+#     types:
+#       - closed
+#     branches:
+#       - argo-workflows-test
+#   paths:
+      # - 'scm/golang/core_msvc/command/cor_cmd_couchbase/*'
+
+env:
+ 
+  IMAGE_TAG: sha.${{ github.sha }}
+  CLUSTER_NAME: dev-scm
+  
+  
+jobs:
+  BuildAndPush:
+#     if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone the code
+        uses: actions/checkout@v3
+        
+      - name: build artifact  
+        run: | 
+          mvn install
+          ls
+                 
+                  
+      - name: Build, Push and Scan image for vulnerabilities
+        id: push-image
+        #working-directory: scm/golang/core_msvc/command/cor_cmd_couchbase/  #Change it based on application name
+        run: |
+           docker build -t syamoliam/ddd:${{ env.IMAGE_TAG }} -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:latest . --rm=false --no-cache
+           docker push syamoliam/ddd:${{ env.IMAGE_TAG }} 
+           #docker push ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:latest
+           #aws ecr start-image-scan --repository-name ${{ env.ECR_REPOSITORY }} --image-id imageTag=${{ env.IMAGE_TAG }}
+  
