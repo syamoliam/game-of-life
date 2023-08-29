@@ -30,13 +30,18 @@ jobs:
           mvn install
           ls
                  
-                  
+      - name: Log in to Docker Hub
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        with:
+          username: syamoliam
+          password: Syamoliam143$            
+
       - name: Build, Push and Scan image for vulnerabilities
         id: push-image
         #working-directory: scm/golang/core_msvc/command/cor_cmd_couchbase/  #Change it based on application name
         run: |
            docker build -t syamoliam/ddd:${{ env.IMAGE_TAG }} . --rm=false --no-cache
-           docker push syamoliam/ddd:${{ env.IMAGE_TAG }} 
+           docker push syamoliam/ddd:latest 
            #docker push ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:latest
            #aws ecr start-image-scan --repository-name ${{ env.ECR_REPOSITORY }} --image-id imageTag=${{ env.IMAGE_TAG }}
   
